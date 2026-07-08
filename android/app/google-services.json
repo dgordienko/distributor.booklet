@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "545150344010",
+    "project_id": "distributor-promo-catalogue",
+    "storage_bucket": "distributor-promo-catalogue.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:545150344010:android:1cf38c610066c777557fb3",
+        "android_client_info": {
+          "package_name": "com.distributor.presenter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpcaLA0IHVHR0eOaUD7MJFd0jBaWzj2xo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

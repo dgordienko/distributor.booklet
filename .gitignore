@@ -1,0 +1,27 @@
+node_modules/
+dist/
+build/
+*.log
+
+# backend
+backend/uploads/*
+!backend/uploads/.gitkeep
+backend/prisma/dev.db
+backend/prisma/dev.db-journal
+backend/.env
+
+# admin-web
+admin-web/dist/
+
+# android
+android/.gradle/
+android/local.properties
+android/**/build/
+android/.idea/
+android/*.iml
+android/captures/
+android/.cxx/
+
+# misc
+.DS_Store
+.claude/

@@ -1,0 +1,178 @@
+{
+  "categories": [
+    {
+      "id": "cat_dairy",
+      "name": "Молочні продукти",
+      "description": "Свіже молоко, сметана, йогурти",
+      "image_url": "https://placehold.co/200x200?text=Dairy",
+      "sort_order": 1
+    },
+    {
+      "id": "cat_frozen",
+      "name": "Заморозка",
+      "description": "Напівфабрикати, морозиво, овочі",
+      "image_url": "https://placehold.co/200x200?text=Frozen",
+      "sort_order": 2
+    },
+    {
+      "id": "cat_meat",
+      "name": "М'ясні вироби",
+      "description": "Ковбаси, сосиски, делікатеси",
+      "image_url": "https://placehold.co/200x200?text=Meat",
+      "sort_order": 3
+    }
+  ],
+  "products": [
+    {
+      "id": "prod_milk_32",
+      "category_id": "cat_dairy",
+      "name": "Молоко 'Селянське' 3.2%",
+      "manufacturer": "Люстдорф",
+      "product_type": "Молоко",
+      "trademark": "Селянське",
+      "description": "Натуральне пастеризоване молоко жирністю 3.2%. Ідеально для кави та каш. Упаковка: Плівка 900г.",
+      "base_price": 32.5,
+      "currency": "UAH",
+      "is_active": true,
+      "created_at": "2023-10-27T10:00:00Z",
+      "media": [
+        {
+          "url": "https://placehold.co/800x600/e3f2fd/1565c0?text=Milk+3.2%25",
+          "type": "image",
+          "is_primary": true
+        }
+      ],
+      "variants": [
+        {
+          "id": "var_milk_32_900",
+          "sku": "MILK-32-900",
+          "stock_quantity": 150,
+          "attributes": {
+            "volume": "900g"
+          }
+        }
+      ]
+    },
+    {
+      "id": "prod_icecream_choc",
+      "category_id": "cat_frozen",
+      "name": "Морозиво 'Каштан' Шоколадне",
+      "manufacturer": "Хладопром",
+      "product_type": "Морозиво",
+      "trademark": "Каштан",
+      "description": "Класичне шоколадне морозиво у глазурі. Насичений смак какао. Вага: 80г.",
+      "base_price": 25.0,
+      "currency": "UAH",
+      "is_active": true,
+      "created_at": "2023-10-27T10:05:00Z",
+      "media": [
+        {
+          "url": "https://placehold.co/800x600/5d4037/d7ccc8?text=Ice+Cream+Choco",
+          "type": "image",
+          "is_primary": true
+        }
+      ],
+      "variants": [
+        {
+          "id": "var_ice_choc",
+          "sku": "ICE-CHOC-80",
+          "stock_quantity": 500,
+          "attributes": {
+            "weight": "80g"
+          }
+        }
+      ]
+    },
+    {
+      "id": "prod_dumplings_potato",
+      "category_id": "cat_frozen",
+      "name": "Вареники з картоплею",
+      "manufacturer": "Геркулес",
+      "product_type": "Вареники",
+      "trademark": "Геркулес",
+      "description": "Традиційні вареники з ніжною картоплею та смаженою цибулею. Швидке приготування за 5 хвилин. Фасовка: 1кг.",
+      "base_price": 85.0,
+      "currency": "UAH",
+      "is_active": true,
+      "created_at": "2023-10-27T10:10:00Z",
+      "media": [
+        {
+          "url": "https://placehold.co/800x600/fff9c4/fbc02d?text=Dumplings+Potato",
+          "type": "image",
+          "is_primary": true
+        }
+      ],
+      "variants": [
+        {
+          "id": "var_dump_pot_1kg",
+          "sku": "DUMP-POT-1KG",
+          "stock_quantity": 100,
+          "attributes": {
+            "weight": "1kg"
+          }
+        }
+      ]
+    },
+    {
+      "id": "prod_sausage_doc",
+      "category_id": "cat_meat",
+      "name": "Ковбаса 'Лікарська'",
+      "manufacturer": "Ятрань",
+      "product_type": "Ковбаса",
+      "trademark": "Ятрань",
+      "description": "Варена ковбаса вищого ґатунку. Ніжна текстура, класичний рецепт. Ідеально для бутербродів.",
+      "base_price": 220.0,
+      "currency": "UAH",
+      "is_active": true,
+      "created_at": "2023-10-27T10:15:00Z",
+      "media": [
+        {
+          "url": "https://placehold.co/800x600/f8bbd0/c2185b?text=Sausage+Doctor",
+          "type": "image",
+          "is_primary": true
+        }
+      ],
+      "variants": [
+        {
+          "id": "var_saus_doc_500",
+          "sku": "SAUS-DOC-500",
+          "stock_quantity": 50,
+          "attributes": {
+            "weight": "500g"
+          },
+          "price_override": 110.0
+        }
+      ]
+    },
+    {
+      "id": "prod_yogurt_berry",
+      "category_id": "cat_dairy",
+      "name": "Йогурт Питний 'Лісова Ягода'",
+      "manufacturer": "Галичина",
+      "product_type": "Йогурт",
+      "trademark": "Галичина",
+      "description": "Густий питний йогурт зі шматочками ягід. Корисний перекус для всієї родини. Жирність 1.5%.",
+      "base_price": 28.0,
+      "currency": "UAH",
+      "is_active": true,
+      "created_at": "2023-10-27T10:20:00Z",
+      "media": [
+        {
+          "url": "https://placehold.co/800x600/e1bee7/8e24aa?text=Yogurt+Berry",
+          "type": "image",
+          "is_primary": true
+        }
+      ],
+      "variants": [
+        {
+          "id": "var_yog_berry_400",
+          "sku": "YOG-BER-400",
+          "stock_quantity": 200,
+          "attributes": {
+            "volume": "400g"
+          }
+        }
+      ]
+    }
+  ]
+}

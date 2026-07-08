@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Раздел буклета: своя страница-разделитель (изображение + название + описание),
+// затем страницы товаров этой категории.
+model Category {
+  id          Int               @id @default(autoincrement())
+  name        String
+  description String            @default("")
+  imageUrl    String            @default("")
+  order       Int               @default(0)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  products    ProductCategory[]
+}
+
+model Product {
+  id                  Int               @id @default(autoincrement())
+  name                String
+  manufacturer        String            @default("")
+  trademark           String            @default("")
+  productType         String            @default("")
+  description         String
+  shelfLife           String            @default("")
+  storageTemperature  String            @default("")
+  composition         String            @default("")
+  basePrice           Float             @default(0)
+  currency            String            @default("UAH")
+  isActive            Boolean           @default(true)
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+  photos              Photo[]
+  categories          ProductCategory[]
+}
+
+// Связь товара с категорией: товар может входить в несколько категорий сразу
+// (например, кросс-категорийная "Акционное предложение"). Порядок страницы
+// товара — свой в каждой категории, поэтому order живёт здесь, а не на Product.
+model ProductCategory {
+  id         Int      @id @default(autoincrement())
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId Int
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId  Int
+  order      Int      @default(0)
+
+  @@unique([categoryId, productId])
+}
+
+model Photo {
+  id        Int      @id @default(autoincrement())
+  filename  String
+  url       String
+  isPrimary Boolean  @default(false)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+  createdAt DateTime @default(now())
+}
+
+// Обложка "буклета": единственная строка настроек бренда (id всегда 1).
+model Brand {
+  id        Int      @id @default(1)
+  name      String   @default("")
+  tagline   String   @default("")
+  logoUrl   String   @default("")
+  updatedAt DateTime @updatedAt
+}

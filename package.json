@@ -1,0 +1,17 @@
+{
+  "name": "distributor-mobile-presenter",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Presenter system: backend + admin web for editing product content, displayed on an Android tablet at the point of sale.",
+  "workspaces": [
+    "backend",
+    "admin-web"
+  ],
+  "scripts": {
+    "dev:backend": "npm run dev --workspace backend",
+    "dev:admin": "npm run dev --workspace admin-web",
+    "build": "npm run build --workspace backend && npm run build --workspace admin-web",
+    "lint": "npm run lint --workspace backend && npm run lint --workspace admin-web",
+    "test": "npm run test --workspace backend && npm run test --workspace admin-web"
+  }
+}
