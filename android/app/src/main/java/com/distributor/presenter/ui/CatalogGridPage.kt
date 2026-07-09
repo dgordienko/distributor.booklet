@@ -8,17 +8,24 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.distributor.presenter.data.Product
 import com.distributor.presenter.data.ProductApi
-import com.distributor.presenter.ui.theme.glassCard
+import com.distributor.presenter.ui.theme.PresenterSurfaceDeep
+import com.distributor.presenter.ui.theme.presenterCard
+import com.distributor.presenter.ui.theme.presenterPill
+import java.util.Locale
 
 // Ниже этой ширины 3 колонки делают плитки нечитаемыми (обрезанные фото/текст) —
 // это порог примерно между портретной и альбомной шириной планшета.
@@ -51,7 +58,7 @@ fun CatalogGridPage(products: List<Product>, onProductClick: (Int) -> Unit) {
 private fun ProductThumbnail(product: Product, modifier: Modifier, onClick: () -> Unit) {
     Column(
         modifier
-            .glassCard(16.dp)
+            .presenterCard(16.dp)
             .clickable(onClick = onClick)
             .padding(12.dp),
     ) {
@@ -59,14 +66,25 @@ private fun ProductThumbnail(product: Product, modifier: Modifier, onClick: () -
             AsyncImage(
                 model = ProductApi.photoUrl(photo = photo),
                 contentDescription = product.name,
-                modifier = Modifier.fillMaxWidth().weight(1f),
+                modifier = Modifier.fillMaxWidth().weight(1f).clip(RoundedCornerShape(12.dp)),
                 contentScale = ContentScale.Crop,
             )
         }
+        Spacer(Modifier.height(8.dp))
         Text(
             text = product.name,
+            color = Color.White,
             style = MaterialTheme.typography.titleMedium,
             maxLines = 2,
         )
+        if (product.basePrice > 0) {
+            Spacer(Modifier.height(6.dp))
+            Text(
+                text = String.format(Locale.getDefault(), "%.2f %s", product.basePrice, product.currency),
+                color = PresenterSurfaceDeep,
+                style = MaterialTheme.typography.labelSmall,
+                modifier = Modifier.presenterPill().padding(horizontal = 10.dp, vertical = 4.dp),
+            )
+        }
     }
 }

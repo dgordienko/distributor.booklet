@@ -22,8 +22,9 @@ import com.distributor.presenter.data.Product
 import com.distributor.presenter.data.ProductApi
 
 // Навигация буклета: "book" (обложка + разделы категорий + сетки товаров,
-// пролистываются как книга) и "product/{id}" — отдельная страница с полным
-// описанием, куда можно провалиться тапом по товару.
+// пролистываются как книга) и "product/{id}" — полноэкранная карточка
+// товара (та же раскладка, что и раньше стояла карусель), куда можно
+// провалиться тапом по плитке в сетке, а дальше пролистать соседние товары.
 @Composable
 fun PresenterApp(api: ProductApi = remember { ProductApi.create() }) {
     var brand by remember { mutableStateOf<Brand?>(null) }
@@ -47,6 +48,10 @@ fun PresenterApp(api: ProductApi = remember { ProductApi.create() }) {
         return
     }
 
+    val orderedProducts = remember(currentCategories, currentProducts) {
+        orderProducts(currentCategories, currentProducts)
+    }
+
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "book") {
         composable("book") {
@@ -62,13 +67,27 @@ fun PresenterApp(api: ProductApi = remember { ProductApi.create() }) {
             arguments = listOf(navArgument("id") { type = NavType.IntType }),
         ) { backStackEntry ->
             val id = backStackEntry.arguments?.getInt("id")
-            val product = currentProducts.firstOrNull { it.id == id }
-            if (product != null) {
-                ProductDetailScreen(
-                    product = product,
-                    onBack = { navController.popBackStack() },
-                )
-            }
+            ProductCarouselScreen(
+                products = orderedProducts,
+                initialProductId = id,
+                onBack = { navController.popBackStack() },
+            )
         }
     }
+}
+
+// Товар может входить в несколько категорий — для карточки товара берём
+// каждый товар один раз (по первому появлению по порядку категорий), чтобы
+// пролистывание соседних товаров не дублировало один и тот же товар подряд.
+private fun orderProducts(categories: List<Category>, products: List<Product>): List<Product> {
+    val seen = mutableSetOf<Int>()
+    val ordered = mutableListOf<Product>()
+    categories.sortedBy { it.order }.forEach { category ->
+        products
+            .filter { product -> product.categories.any { it.categoryId == category.id } }
+            .sortedBy { it.orderIn(category.id) }
+            .forEach { product -> if (seen.add(product.id)) ordered += product }
+    }
+    products.filter { it.categories.isEmpty() }.forEach { product -> if (seen.add(product.id)) ordered += product }
+    return ordered
 }
