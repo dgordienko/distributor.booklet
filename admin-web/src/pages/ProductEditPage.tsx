@@ -4,6 +4,7 @@ import { api, type Category, type Product, type ProductInput } from "../api/clie
 import { Button, IconButton } from "../components/Button";
 import { StarIcon, TrashIcon, UploadIcon } from "../components/icons";
 import { RichTextEditor } from "../components/RichTextEditor";
+import { useLocale } from "../context/LocaleContext";
 
 const emptyForm: ProductInput = {
   categoryIds: [],
@@ -28,6 +29,7 @@ export function ProductEditPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [form, setForm] = useState<ProductInput>(emptyForm);
+  const { t } = useLocale();
 
   useEffect(() => {
     api.listCategories().then(setCategories);
@@ -114,17 +116,14 @@ export function ProductEditPage() {
 
   return (
     <div className="page">
-      <h1>{isNew ? "Новый товар" : "Редактировать товар"}</h1>
+      <h1>{isNew ? t("products.newTitle") : t("products.editTitle")}</h1>
       <div className="card">
         <div className="field">
-          <span className="field-label">Категории</span>
-          <span className="field-hint">
-            Товар может входить сразу в несколько категорий (например, в свою
-            обычную категорию и в "Акционное предложение").
-          </span>
+          <span className="field-label">{t("products.categoriesLabel")}</span>
+          <span className="field-hint">{t("products.categoriesHint")}</span>
           <div className="checkbox-list">
             {categories.length === 0 && (
-              <span className="empty-state">Сначала создайте категорию</span>
+              <span className="empty-state">{t("common.noCategoriesYet")}</span>
             )}
             {categories.map((category) => (
               <label key={category.id} className="checkbox-list-item">
@@ -139,63 +138,63 @@ export function ProductEditPage() {
           </div>
         </div>
         <label>
-          Название
+          {t("common.name")}
           <input
             value={form.name}
             onChange={(e) => updateForm("name", e.target.value)}
           />
         </label>
         <label>
-          Производитель
+          {t("products.manufacturer")}
           <input
             value={form.manufacturer}
             onChange={(e) => updateForm("manufacturer", e.target.value)}
           />
         </label>
         <label>
-          Торговая марка
+          {t("products.trademark")}
           <input
             value={form.trademark}
             onChange={(e) => updateForm("trademark", e.target.value)}
           />
         </label>
         <label>
-          Тип товара
+          {t("products.productType")}
           <input
             value={form.productType}
             onChange={(e) => updateForm("productType", e.target.value)}
           />
         </label>
         <label>
-          Описание
+          {t("common.description")}
           <RichTextEditor
             value={form.description}
             onChange={(html) => updateForm("description", html)}
           />
         </label>
         <label>
-          Термін зберігання товару
+          {t("products.shelfLife")}
           <input
             value={form.shelfLife}
             onChange={(e) => updateForm("shelfLife", e.target.value)}
           />
         </label>
         <label>
-          Температура зберігання
+          {t("products.storageTemperature")}
           <input
             value={form.storageTemperature}
             onChange={(e) => updateForm("storageTemperature", e.target.value)}
           />
         </label>
         <label>
-          Склад
+          {t("products.composition")}
           <textarea
             value={form.composition}
             onChange={(e) => updateForm("composition", e.target.value)}
           />
         </label>
         <label>
-          Цена
+          {t("products.price")}
           <input
             type="number"
             step="0.01"
@@ -204,7 +203,7 @@ export function ProductEditPage() {
           />
         </label>
         <label>
-          Валюта
+          {t("products.currency")}
           <input
             value={form.currency}
             onChange={(e) => updateForm("currency", e.target.value)}
@@ -216,15 +215,15 @@ export function ProductEditPage() {
             checked={form.isActive}
             onChange={(e) => updateForm("isActive", e.target.checked)}
           />
-          Показывать на планшете
+          {t("products.isActive")}
         </label>
         <div className="button-row">
           <Button variant="primary" onClick={handleSave}>
-            Сохранить
+            {t("common.save")}
           </Button>
           {!isNew && (
             <Button variant="danger" onClick={handleDelete}>
-              Удалить
+              {t("common.delete")}
             </Button>
           )}
         </div>
@@ -233,11 +232,11 @@ export function ProductEditPage() {
       {!isNew && (
         <div className="section">
           <div className="section-header">
-            <h2>Фото</h2>
+            <h2>{t("products.photosTitle")}</h2>
           </div>
           <div className="card">
             <label htmlFor="product-photo" className="button button-ghost">
-              <UploadIcon /> Загрузить фото
+              <UploadIcon /> {t("products.uploadPhoto")}
             </label>
             <input
               id="product-photo"
@@ -253,19 +252,19 @@ export function ProductEditPage() {
                   <div className="photo-tile-actions">
                     {photo.isPrimary ? (
                       <span className="badge badge-accent">
-                        <StarIcon filled width={12} height={12} /> Главное
+                        <StarIcon filled width={12} height={12} /> {t("products.primaryPhoto")}
                       </span>
                     ) : (
                       <IconButton
                         onClick={() => handleSetPrimary(photo.id)}
-                        aria-label="Сделать главным"
+                        aria-label={t("products.makePrimary")}
                       >
                         <StarIcon />
                       </IconButton>
                     )}
                     <IconButton
                       onClick={() => handleDeletePhoto(photo.id)}
-                      aria-label="Удалить фото"
+                      aria-label={t("products.deletePhoto")}
                     >
                       <TrashIcon />
                     </IconButton>

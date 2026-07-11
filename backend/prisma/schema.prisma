@@ -18,6 +18,19 @@ model Category {
   createdAt   DateTime          @default(now())
   updatedAt   DateTime          @updatedAt
   products    ProductCategory[]
+  teams       Team[]
+}
+
+// Мобильная команда (frcId/frcName), синхронизируется по кнопке из внешнего
+// API устройств. Категория без команд видна всем (общий каталог), категория
+// с командами — только им (свой каталог на команду).
+model Team {
+  id         Int        @id @default(autoincrement())
+  frcId      BigInt     @unique
+  frcName    String
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  categories Category[]
 }
 
 model Product {

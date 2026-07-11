@@ -12,6 +12,7 @@ backend/.env
 
 # admin-web
 admin-web/dist/
+admin-web/.env
 
 # android
 android/.gradle/

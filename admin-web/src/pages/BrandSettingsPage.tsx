@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { api, type Brand } from "../api/client";
 import { Button } from "../components/Button";
 import { UploadIcon } from "../components/icons";
+import { useLocale } from "../context/LocaleContext";
 
 export function BrandSettingsPage() {
   const [brand, setBrand] = useState<Brand | null>(null);
   const [name, setName] = useState("");
   const [tagline, setTagline] = useState("");
   const [saved, setSaved] = useState(false);
+  const { t } = useLocale();
 
   useEffect(() => {
     api.getBrand().then((data) => {
@@ -31,14 +33,14 @@ export function BrandSettingsPage() {
     }
   }
 
-  if (!brand) return <p>Загрузка...</p>;
+  if (!brand) return <p>{t("common.loading")}</p>;
 
   return (
     <div className="page">
-      <h1>Обложка буклета (торговая марка)</h1>
+      <h1>{t("brand.title")}</h1>
       <div className="card">
         <label>
-          Название бренда
+          {t("brand.name")}
           <input
             value={name}
             onChange={(e) => {
@@ -48,7 +50,7 @@ export function BrandSettingsPage() {
           />
         </label>
         <label>
-          Слоган
+          {t("brand.tagline")}
           <input
             value={tagline}
             onChange={(e) => {
@@ -59,19 +61,19 @@ export function BrandSettingsPage() {
         </label>
         <div className="button-row">
           <Button variant="primary" onClick={handleSave}>
-            Сохранить
+            {t("common.save")}
           </Button>
-          {saved && <span className="badge badge-accent">Сохранено</span>}
+          {saved && <span className="badge badge-accent">{t("common.saved")}</span>}
         </div>
       </div>
 
       <div className="section">
         <div className="section-header">
-          <h2>Логотип</h2>
+          <h2>{t("brand.logoTitle")}</h2>
         </div>
         <div className="card">
           <label htmlFor="brand-logo" className="button button-ghost">
-            <UploadIcon /> Загрузить логотип
+            <UploadIcon /> {t("brand.uploadLogo")}
           </label>
           <input
             id="brand-logo"
@@ -81,7 +83,7 @@ export function BrandSettingsPage() {
             style={{ display: "none" }}
           />
           {brand.logoUrl && (
-            <img src={brand.logoUrl} alt="Логотип" className="image-preview" />
+            <img src={brand.logoUrl} alt={t("brand.logoAlt")} className="image-preview" />
           )}
         </div>
       </div>

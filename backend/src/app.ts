@@ -3,6 +3,7 @@ import cors from "cors";
 import { productsRouter } from "./routes/products.routes";
 import { brandRouter } from "./routes/brand.routes";
 import { categoriesRouter } from "./routes/categories.routes";
+import { teamsRouter } from "./routes/teams.routes";
 import { UPLOADS_DIR } from "./middleware/upload";
 
 export function createApp() {
@@ -16,6 +17,7 @@ export function createApp() {
   app.use("/api/products", productsRouter);
   app.use("/api/brand", brandRouter);
   app.use("/api/categories", categoriesRouter);
+  app.use("/api/teams", teamsRouter);
 
   return app;
 }

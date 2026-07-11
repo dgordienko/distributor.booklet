@@ -15,7 +15,7 @@ export async function getOne(req: Request, res: Response) {
 }
 
 export async function create(req: Request, res: Response) {
-  const { name, description } = req.body;
+  const { name, description, teamIds } = req.body;
   if (!name) {
     res.status(400).json({ error: "name is required" });
     return;
@@ -23,15 +23,16 @@ export async function create(req: Request, res: Response) {
   const category = await categoriesService.createCategory({
     name,
     description: description ?? "",
+    teamIds,
   });
   res.status(201).json(category);
 }
 
 export async function update(req: Request, res: Response) {
-  const { name, description } = req.body;
+  const { name, description, teamIds } = req.body;
   const category = await categoriesService.updateCategory(
     Number(req.params.id),
-    { name, description },
+    { name, description, teamIds },
   );
   res.json(category);
 }

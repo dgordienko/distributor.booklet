@@ -10,6 +10,7 @@ import {
   BulletListIcon,
   OrderedListIcon,
 } from "./icons";
+import { useLocale } from "../context/LocaleContext";
 
 interface RichTextEditorProps {
   value: string;
@@ -21,6 +22,7 @@ interface RichTextEditorProps {
 // маркированный/нумерованный список, выравнивание абзаца. Без заголовков,
 // цитат, кода и ссылок — их некому показывать на стороне планшета.
 export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
+  const { t } = useLocale();
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -52,29 +54,33 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
           type="button"
           className={editor.isActive("bold") ? "is-active" : ""}
           onClick={() => editor.chain().focus().toggleBold().run()}
+          aria-label={t("editor.boldLabel")}
         >
-          <b>Ж</b>
+          <b>{t("editor.bold")}</b>
         </button>
         <button
           type="button"
           className={editor.isActive("italic") ? "is-active" : ""}
           onClick={() => editor.chain().focus().toggleItalic().run()}
+          aria-label={t("editor.italicLabel")}
         >
-          <i>К</i>
+          <i>{t("editor.italic")}</i>
         </button>
         <button
           type="button"
           className={editor.isActive("underline") ? "is-active" : ""}
           onClick={() => editor.chain().focus().toggleUnderline().run()}
+          aria-label={t("editor.underlineLabel")}
         >
-          <u>Ч</u>
+          <u>{t("editor.underline")}</u>
         </button>
         <button
           type="button"
           className={editor.isActive("strike") ? "is-active" : ""}
           onClick={() => editor.chain().focus().toggleStrike().run()}
+          aria-label={t("editor.strikeLabel")}
         >
-          <s>З</s>
+          <s>{t("editor.strike")}</s>
         </button>
 
         <span className="rich-text-toolbar-divider" />
@@ -83,7 +89,7 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
           type="button"
           className={editor.isActive("bulletList") ? "is-active" : ""}
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          aria-label="Маркированный список"
+          aria-label={t("editor.bulletList")}
         >
           <BulletListIcon />
         </button>
@@ -91,7 +97,7 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
           type="button"
           className={editor.isActive("orderedList") ? "is-active" : ""}
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          aria-label="Нумерованный список"
+          aria-label={t("editor.orderedList")}
         >
           <OrderedListIcon />
         </button>
@@ -102,7 +108,7 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
           type="button"
           className={editor.isActive({ textAlign: "left" }) ? "is-active" : ""}
           onClick={() => editor.chain().focus().setTextAlign("left").run()}
-          aria-label="По левому краю"
+          aria-label={t("editor.alignLeft")}
         >
           <AlignLeftIcon />
         </button>
@@ -110,7 +116,7 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
           type="button"
           className={editor.isActive({ textAlign: "center" }) ? "is-active" : ""}
           onClick={() => editor.chain().focus().setTextAlign("center").run()}
-          aria-label="По центру"
+          aria-label={t("editor.alignCenter")}
         >
           <AlignCenterIcon />
         </button>
@@ -118,7 +124,7 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
           type="button"
           className={editor.isActive({ textAlign: "right" }) ? "is-active" : ""}
           onClick={() => editor.chain().focus().setTextAlign("right").run()}
-          aria-label="По правому краю"
+          aria-label={t("editor.alignRight")}
         >
           <AlignRightIcon />
         </button>
@@ -126,7 +132,7 @@ export function RichTextEditor({ value, onChange }: RichTextEditorProps) {
           type="button"
           className={editor.isActive({ textAlign: "justify" }) ? "is-active" : ""}
           onClick={() => editor.chain().focus().setTextAlign("justify").run()}
-          aria-label="По ширине"
+          aria-label={t("editor.alignJustify")}
         >
           <AlignJustifyIcon />
         </button>
