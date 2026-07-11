@@ -3,10 +3,6 @@
 # Build context is the repo root (see docker-compose.yml) because this is an
 # npm-workspaces monorepo with a single root package-lock.json — `npm ci`
 # needs that lockfile alongside the root package.json to install correctly.
-#
-# Debian slim (not alpine): @imgly/background-removal-node pulls in `sharp`
-# and `onnxruntime-node`, native addons that are far more reliably prebuilt
-# for glibc than musl. Alpine has bitten this exact dependency pair before.
 
 FROM node:20-bookworm-slim AS base
 # Prisma's engine needs libssl to actually run, and needs the `openssl`
