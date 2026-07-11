@@ -12,6 +12,8 @@ backend/.env
 
 # admin-web
 admin-web/dist/
+admin-web/.env
+admin-web/tsconfig.tsbuildinfo
 
 # android
 android/.gradle/

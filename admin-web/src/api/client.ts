@@ -42,12 +42,19 @@ export interface ProductInput {
   isActive: boolean;
 }
 
+export interface Team {
+  id: number;
+  frcId: number;
+  frcName: string;
+}
+
 export interface Category {
   id: number;
   name: string;
   description: string;
   imageUrl: string;
   order: number;
+  teams: Team[];
 }
 
 export interface Brand {
@@ -106,10 +113,12 @@ export const api = {
 
   listCategories: () => request<Category[]>("/categories"),
   getCategory: (id: number) => request<Category>(`/categories/${id}`),
-  createCategory: (data: { name: string; description: string }) =>
+  createCategory: (data: { name: string; description: string; teamIds: number[] }) =>
     request<Category>("/categories", json("POST", data)),
-  updateCategory: (id: number, data: { name: string; description: string }) =>
-    request<Category>(`/categories/${id}`, json("PUT", data)),
+  updateCategory: (
+    id: number,
+    data: { name: string; description: string; teamIds: number[] },
+  ) => request<Category>(`/categories/${id}`, json("PUT", data)),
   deleteCategory: (id: number) =>
     request<void>(`/categories/${id}`, { method: "DELETE" }),
   moveCategory: (id: number, direction: "up" | "down") =>
@@ -122,6 +131,9 @@ export const api = {
       body: formData,
     });
   },
+
+  listTeams: () => request<Team[]>("/teams"),
+  syncTeams: () => request<Team[]>("/teams/sync", { method: "POST" }),
 
   getBrand: () => request<Brand>("/brand"),
   updateBrand: (data: { name: string; tagline: string }) =>

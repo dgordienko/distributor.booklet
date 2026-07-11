@@ -1,7 +1,6 @@
 package com.distributor.presenter.ui.theme
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,28 +10,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 private val PresenterColorScheme = darkColorScheme(
-    primary = PresenterPrimary,
-    onPrimary = PresenterOnColor,
-    secondary = PresenterSecondary,
+    primary = PresenterAccent,
+    onPrimary = PresenterSurfaceDeep,
+    secondary = PresenterSurface,
     onSecondary = PresenterOnColor,
-    tertiary = PresenterTertiary,
+    tertiary = PresenterSurfaceDeep,
     onTertiary = PresenterOnColor,
-    background = GradientMid,
+    background = PresenterSurfaceDeep,
     onBackground = PresenterOnColor,
-    surface = GlassSurface,
+    surface = PresenterSurface,
     onSurface = PresenterOnColor,
-    surfaceVariant = GlassSurface,
-    onSurfaceVariant = MutedOnBackground,
-    outline = GlassBorder,
-)
-
-// Единый градиентный фон буклета вместо разных цветов на каждой странице.
-val PresenterBackgroundBrush = Brush.verticalGradient(
-    colors = listOf(GradientTop, GradientMid, GradientBottom),
+    surfaceVariant = PresenterSurface,
+    onSurfaceVariant = PresenterMuted,
+    outline = PresenterMutedDim,
 )
 
 @Composable
@@ -46,14 +41,31 @@ fun PresenterTheme(content: @Composable () -> Unit) {
 
 @Composable
 fun PresenterBackground(content: @Composable () -> Unit) {
-    Box(Modifier.fillMaxSize().background(PresenterBackgroundBrush)) {
+    Box(Modifier.fillMaxSize().background(PresenterSurfaceDeep)) {
         content()
     }
 }
 
-// "Glass" — базовая поверхность карточек по дизайн-документу: полупрозрачный
-// белый фон + тонкая белая обводка поверх градиентного фона.
-fun Modifier.glassCard(radius: Dp = 16.dp): Modifier = this
+// Единая карточная поверхность буклета (обложка, разделитель категории,
+// плитка товара в сетке) — полупрозрачный navy поверх фото/градиента,
+// см. component "card" в Testimonials-Section-DESIGN.md.
+fun Modifier.presenterCard(radius: Dp = 16.dp): Modifier = this
     .clip(RoundedCornerShape(radius))
-    .background(GlassSurface)
-    .border(1.dp, GlassBorder, RoundedCornerShape(radius))
+    .background(PresenterSurface.copy(alpha = 0.55f))
+
+// Пилюля-бейдж/CTA (цена, тип товара, подсказки навигации) — component
+// "button-primary" из дизайн-токенов: акцентный фон, radius 9999px.
+fun Modifier.presenterPill(): Modifier = this
+    .clip(RoundedCornerShape(percent = 50))
+    .background(PresenterAccent)
+
+// Общий navy-скрим для полноэкранных фото-страниц (карточка товара,
+// разделитель категории) — затемняет низ снимка, чтобы текст поверх
+// оставался читаемым.
+val PresenterScrimBrush = Brush.verticalGradient(
+    colorStops = arrayOf(
+        0.0f to Color.Transparent,
+        0.45f to PresenterSurface.copy(alpha = 0.55f),
+        1.0f to PresenterSurfaceDeep.copy(alpha = 0.92f),
+    ),
+)

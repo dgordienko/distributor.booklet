@@ -5,11 +5,13 @@ import { IconButton } from "../components/Button";
 import { ArrowDownIcon, ArrowUpIcon, PhotoIcon, PlusIcon } from "../components/icons";
 import { stripHtml } from "../lib/stripHtml";
 import { useSearch } from "../context/SearchContext";
+import { useLocale } from "../context/LocaleContext";
 
 export function CategoriesListPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const { search } = useSearch();
+  const { t } = useLocale();
 
   useEffect(() => {
     api.listCategories().then((data) => {
@@ -23,7 +25,7 @@ export function CategoriesListPage() {
     setCategories(updated);
   }
 
-  if (loading) return <p>Загрузка...</p>;
+  if (loading) return <p>{t("common.loading")}</p>;
 
   const query = search.trim().toLowerCase();
   const filteredCategories = query
@@ -32,12 +34,10 @@ export function CategoriesListPage() {
 
   return (
     <div className="page page-wide">
-      <h1>Категории (разделы буклета)</h1>
-      <p className="page-intro">
-        Порядок в списке определяет порядок разделов буклета на планшете.
-      </p>
+      <h1>{t("categories.title")}</h1>
+      <p className="page-intro">{t("categories.intro")}</p>
       <Link to="/categories/new" className="button button-primary">
-        <PlusIcon /> Добавить категорию
+        <PlusIcon /> {t("categories.add")}
       </Link>
 
       <div className="entity-grid section">
@@ -53,8 +53,17 @@ export function CategoriesListPage() {
             <Link to={`/categories/${category.id}`} className="entity-card-body">
               <div className="entity-card-title">{category.name}</div>
               <p className="entity-card-snippet">
-                {stripHtml(category.description) || "Без описания"}
+                {stripHtml(category.description) || t("common.noDescription")}
               </p>
+              {category.teams.length > 0 && (
+                <div className="card-row-actions" style={{ flexWrap: "wrap" }}>
+                  {category.teams.map((team) => (
+                    <span className="badge badge-accent" key={team.id}>
+                      {team.frcName}
+                    </span>
+                  ))}
+                </div>
+              )}
             </Link>
             <div className="entity-card-footer">
               <span />
@@ -62,14 +71,14 @@ export function CategoriesListPage() {
                 <IconButton
                   disabled={index === 0}
                   onClick={() => handleMove(category.id, "up")}
-                  aria-label="Переместить выше"
+                  aria-label={t("common.moveUp")}
                 >
                   <ArrowUpIcon />
                 </IconButton>
                 <IconButton
                   disabled={index === filteredCategories.length - 1}
                   onClick={() => handleMove(category.id, "down")}
-                  aria-label="Переместить ниже"
+                  aria-label={t("common.moveDown")}
                 >
                   <ArrowDownIcon />
                 </IconButton>
