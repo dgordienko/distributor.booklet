@@ -1,0 +1,28 @@
+# Applies to the repo-root build context used by backend/Dockerfile and
+# admin-web/Dockerfile. Each Dockerfile COPYs only the specific paths it
+# needs, so this mainly keeps the build context small/fast to send to the
+# daemon rather than acting as the sole safety net.
+
+**/node_modules
+**/dist
+**/build
+**/.git
+**/*.log
+
+android/
+
+backend/uploads/*
+!backend/uploads/.gitkeep
+backend/prisma/dev.db
+backend/prisma/dev.db-journal
+backend/.env
+backend/.claude
+
+admin-web/tsconfig.tsbuildinfo
+admin-web/.env
+admin-web/.claude
+
+.claude
+.DS_Store
+.env
+docker-compose.override.yml

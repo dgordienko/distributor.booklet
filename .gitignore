@@ -24,6 +24,9 @@ android/*.iml
 android/captures/
 android/.cxx/
 
+# docker-compose
+/.env
+
 # misc
 .DS_Store
 .claude/

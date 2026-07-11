@@ -1,0 +1,47 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    image: distributor-presenter-backend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: "4000"
+      DATABASE_URL: file:/data/app.db
+      UPLOADS_DIR: /data/uploads
+      DEVICES_API_URL: ${DEVICES_API_URL:-http://194.247.12.105:8089/api/devices}
+    volumes:
+      - backend_data:/data
+    ports:
+      - "${BACKEND_PORT:-4000}:4000"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:4000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  admin:
+    build:
+      context: .
+      dockerfile: admin-web/Dockerfile
+      args:
+        VITE_AUTH0_DOMAIN: ${AUTH0_DOMAIN:?set AUTH0_DOMAIN in .env}
+        VITE_AUTH0_CLIENT_ID: ${AUTH0_CLIENT_ID:?set AUTH0_CLIENT_ID in .env}
+    image: distributor-presenter-admin
+    restart: unless-stopped
+    ports:
+      - "${ADMIN_PORT:-8080}:8080"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  backend_data:
