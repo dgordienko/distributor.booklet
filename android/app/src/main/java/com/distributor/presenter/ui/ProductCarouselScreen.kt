@@ -18,6 +18,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,6 +41,13 @@ import java.util.Locale
 // (CatalogGridPage) на конкретном товаре, дальше можно пролистать соседние.
 @Composable
 fun ProductCarouselScreen(products: List<Product>, initialProductId: Int?, onBack: () -> Unit) {
+    if (products.isEmpty()) {
+        // Может случиться при восстановлении навигации после смерти процесса,
+        // если каталог ещё не успел (пере)загрузиться — просто возвращаемся в буклет.
+        LaunchedEffect(Unit) { onBack() }
+        return
+    }
+
     val startIndex = remember(products, initialProductId) {
         initialProductId?.let { id -> products.indexOfFirst { it.id == id } }?.takeIf { it >= 0 } ?: 0
     }

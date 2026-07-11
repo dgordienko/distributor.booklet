@@ -45,6 +45,15 @@ export function ProductsListPage() {
 
   const uncategorizedCount = products.filter((p) => p.categories.length === 0).length;
 
+  // Один проход по товарам вместо фильтрации по каждой категории в рендере
+  // сайдбара (O(товары) вместо O(категории × товары) для больших каталогов).
+  const categoryCounts = new Map<number, number>();
+  for (const product of products) {
+    for (const c of product.categories) {
+      categoryCounts.set(c.categoryId, (categoryCounts.get(c.categoryId) ?? 0) + 1);
+    }
+  }
+
   // Товар может входить сразу в несколько категорий (например, в свою
   // обычную категорию и в "Акционное предложение"), поэтому один товар может
   // попасть сразу в несколько групп ниже — по разу на каждую свою категорию.
@@ -116,7 +125,7 @@ export function ProductsListPage() {
                   )}
                 </span>
                 <span className="category-filter-count">
-                  {products.filter((p) => p.categories.some((c) => c.categoryId === category.id)).length}
+                  {categoryCounts.get(category.id) ?? 0}
                 </span>
               </button>
             );

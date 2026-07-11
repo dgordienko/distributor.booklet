@@ -65,7 +65,7 @@ export function App() {
               />
             </div>
           )}
-          <div className="locale-switch" role="group" aria-label="Language">
+          <div className="locale-switch" role="group" aria-label={t("common.language")}>
             {LOCALES.map((code) => (
               <button
                 key={code}

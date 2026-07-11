@@ -11,10 +11,11 @@ export function TeamsPage() {
   const { t } = useLocale();
 
   useEffect(() => {
-    api.listTeams().then((data) => {
-      setTeams(data);
-      setLoading(false);
-    });
+    api
+      .listTeams()
+      .then((data) => setTeams(data))
+      .catch(() => setError(true))
+      .finally(() => setLoading(false));
   }, []);
 
   async function handleSync() {

@@ -1,6 +1,10 @@
 import type { Request, Response } from "express";
 import * as categoriesService from "../services/categories.service";
 
+function isValidTeamIds(teamIds: unknown): teamIds is number[] {
+  return Array.isArray(teamIds) && teamIds.every((id) => typeof id === "number");
+}
+
 export async function list(_req: Request, res: Response) {
   res.json(await categoriesService.listCategories());
 }
@@ -20,6 +24,10 @@ export async function create(req: Request, res: Response) {
     res.status(400).json({ error: "name is required" });
     return;
   }
+  if (teamIds !== undefined && !isValidTeamIds(teamIds)) {
+    res.status(400).json({ error: "teamIds must be an array of numbers" });
+    return;
+  }
   const category = await categoriesService.createCategory({
     name,
     description: description ?? "",
@@ -30,6 +38,10 @@ export async function create(req: Request, res: Response) {
 
 export async function update(req: Request, res: Response) {
   const { name, description, teamIds } = req.body;
+  if (teamIds !== undefined && !isValidTeamIds(teamIds)) {
+    res.status(400).json({ error: "teamIds must be an array of numbers" });
+    return;
+  }
   const category = await categoriesService.updateCategory(
     Number(req.params.id),
     { name, description, teamIds },

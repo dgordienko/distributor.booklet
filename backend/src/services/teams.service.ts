@@ -33,13 +33,15 @@ export async function syncTeams() {
     uniqueTeams.set(device.frcId, device.frcName);
   }
 
-  for (const [frcId, frcName] of uniqueTeams) {
-    await prisma.team.upsert({
-      where: { frcId: BigInt(frcId) },
-      update: { frcName },
-      create: { frcId: BigInt(frcId), frcName },
-    });
-  }
+  await prisma.$transaction(
+    Array.from(uniqueTeams, ([frcId, frcName]) =>
+      prisma.team.upsert({
+        where: { frcId: BigInt(frcId) },
+        update: { frcName },
+        create: { frcId: BigInt(frcId), frcName },
+      }),
+    ),
+  );
 
   return listTeams();
 }

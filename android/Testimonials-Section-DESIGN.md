@@ -156,6 +156,6 @@ Motion feels controlled and interface-led across text, layout, and section trans
 
 **Durations:** 500ms, 300ms
 
-**Easings:** ease, 0, 0.2, 1), cubic-bezier(0, cubic-bezier(0.4
+**Easings:** ease, cubic-bezier(0.4, 0, 0.2, 1)
 
 **Hover Patterns:** !rotate, z, transform, shadow, color

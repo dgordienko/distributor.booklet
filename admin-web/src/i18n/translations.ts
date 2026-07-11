@@ -22,6 +22,7 @@ const ru: Dictionary = {
   "common.moveDown": "Переместить ниже",
   "common.searchPlaceholder": "Поиск...",
   "common.search": "Поиск",
+  "common.language": "Язык",
   "common.noCategoriesYet": "Сначала создайте категорию",
   "common.saved": "Сохранено",
 
@@ -122,6 +123,7 @@ const uk: Dictionary = {
   "common.moveDown": "Перемістити нижче",
   "common.searchPlaceholder": "Пошук...",
   "common.search": "Пошук",
+  "common.language": "Мова",
   "common.noCategoriesYet": "Спочатку створіть категорію",
   "common.saved": "Збережено",
 
@@ -222,6 +224,7 @@ const en: Dictionary = {
   "common.moveDown": "Move down",
   "common.searchPlaceholder": "Search...",
   "common.search": "Search",
+  "common.language": "Language",
   "common.noCategoriesYet": "Create a category first",
   "common.saved": "Saved",
 
