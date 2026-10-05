@@ -64,10 +64,28 @@ export interface Brand {
   logoUrl: string;
 }
 
-const API_BASE = "/api";
+import { BASE_PATH } from "../lib/basePath";
+
+const API_BASE = `${BASE_PATH}/api`;
+
+// Изменяющие запросы бэкенд принимает только с Auth0 access-токеном.
+// Провайдер токена выставляется из React-дерева (см. App.tsx), здесь нет хуков.
+let getAccessToken: (() => Promise<string>) | undefined;
+
+export function setAccessTokenProvider(provider: (() => Promise<string>) | undefined) {
+  getAccessToken = provider;
+}
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${API_BASE}${path}`, init);
+  const method = (init?.method ?? "GET").toUpperCase();
+  let finalInit = init;
+  if (method !== "GET" && getAccessToken) {
+    const token = await getAccessToken();
+    const headers = new Headers(init?.headers);
+    headers.set("Authorization", `Bearer ${token}`);
+    finalInit = { ...init, headers };
+  }
+  const res = await fetch(`${API_BASE}${path}`, finalInit);
   if (!res.ok) {
     throw new Error(`Request failed: ${res.status} ${res.statusText}`);
   }

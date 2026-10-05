@@ -6,6 +6,7 @@ import { App } from "./App";
 import { SearchProvider } from "./context/SearchContext";
 import { LocaleProvider } from "./context/LocaleContext";
 import { ThemeProvider } from "./context/ThemeContext";
+import { BASE_PATH } from "./lib/basePath";
 import "./styles.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -13,9 +14,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <Auth0Provider
       domain={import.meta.env.VITE_AUTH0_DOMAIN}
       clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
-      authorizationParams={{ redirect_uri: window.location.origin }}
+      authorizationParams={{
+        redirect_uri: window.location.origin + BASE_PATH,
+        audience: import.meta.env.VITE_AUTH0_AUDIENCE,
+      }}
     >
-      <BrowserRouter>
+      <BrowserRouter basename={BASE_PATH || "/"}>
         <ThemeProvider>
           <LocaleProvider>
             <SearchProvider>

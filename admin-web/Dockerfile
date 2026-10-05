@@ -14,8 +14,12 @@ FROM deps AS build
 # tenant/client to use must be supplied as build args, not runtime env vars.
 ARG VITE_AUTH0_DOMAIN
 ARG VITE_AUTH0_CLIENT_ID
+ARG VITE_AUTH0_AUDIENCE
+ARG VITE_BASE_PATH=/
 ENV VITE_AUTH0_DOMAIN=$VITE_AUTH0_DOMAIN \
-    VITE_AUTH0_CLIENT_ID=$VITE_AUTH0_CLIENT_ID
+    VITE_AUTH0_CLIENT_ID=$VITE_AUTH0_CLIENT_ID \
+    VITE_AUTH0_AUDIENCE=$VITE_AUTH0_AUDIENCE \
+    VITE_BASE_PATH=$VITE_BASE_PATH
 COPY admin-web/index.html admin-web/index.html
 COPY admin-web/vite.config.ts admin-web/vite.config.ts
 COPY admin-web/tsconfig.json admin-web/tsconfig.json

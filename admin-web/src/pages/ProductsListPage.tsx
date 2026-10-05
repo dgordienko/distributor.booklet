@@ -1,3 +1,4 @@
+import { assetUrl } from "../lib/basePath";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { api, type Category, type Product } from "../api/client";
@@ -165,7 +166,7 @@ export function ProductsListPage() {
                     return (
                       <div className="entity-card" key={product.id}>
                         {photo ? (
-                          <img src={photo.url} alt="" className="entity-card-media" />
+                          <img src={assetUrl(photo.url)} alt="" className="entity-card-media" />
                         ) : (
                           <div className="entity-card-media-placeholder">
                             <PhotoIcon />
