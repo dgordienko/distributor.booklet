@@ -15,9 +15,12 @@ interface ProductApi {
     suspend fun listCategories(): List<Category>
 
     companion object {
-        // 10.0.2.2 маршрутизируется на localhost хост-машины из Android-эмулятора.
-        // На реальном планшете замените на адрес сервера в локальной сети.
-        const val BASE_URL = "http://10.0.2.2:4000/"
+        // Продакшен: админка и API опубликованы за общим nginx на префиксе /booklet/.
+        // Слэш в конце обязателен (требование Retrofit), а пути эндпоинтов выше
+        // относительные ("api/..."), поэтому они дописываются после префикса.
+        // Для локальной разработки в эмуляторе: "http://10.0.2.2:4000/"
+        // (10.0.2.2 маршрутизируется на localhost хост-машины).
+        const val BASE_URL = "https://dswapi.online/booklet/"
 
         fun create(baseUrl: String = BASE_URL): ProductApi =
             Retrofit.Builder()
