@@ -5,6 +5,7 @@ import { Auth0Provider } from "@auth0/auth0-react";
 import { App } from "./App";
 import { SearchProvider } from "./context/SearchContext";
 import { LocaleProvider } from "./context/LocaleContext";
+import { ThemeProvider } from "./context/ThemeContext";
 import "./styles.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -15,11 +16,13 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       authorizationParams={{ redirect_uri: window.location.origin }}
     >
       <BrowserRouter>
-        <LocaleProvider>
-          <SearchProvider>
-            <App />
-          </SearchProvider>
-        </LocaleProvider>
+        <ThemeProvider>
+          <LocaleProvider>
+            <SearchProvider>
+              <App />
+            </SearchProvider>
+          </LocaleProvider>
+        </ThemeProvider>
       </BrowserRouter>
     </Auth0Provider>
   </React.StrictMode>,

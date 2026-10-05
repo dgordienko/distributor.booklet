@@ -1,24 +1,35 @@
 /* Tokens sourced from DESIGN.md */
 :root {
-  --color-bg: #ffffff;
-  --color-surface: #9ca3af;
-  --color-primary: #9ca3af;
-  --color-secondary: #fb923c;
-  --color-tertiary: #1e293b;
-  --color-neutral: #d1d5db;
-  --color-text-strong: #111827;
-  --color-text-muted: #6b7280;
-  --color-border: #f3f4f6;
-  --color-border-strong: #e5e7eb;
-  --color-danger: #dc2626;
-  --color-danger-bg: #fef2f2;
+  --color-bg: #06070d;
+  --color-surface: #0e1120;
+  --color-surface-raised: #151828;
+  --color-primary: #ff8a3d;
+  --color-secondary: #ff8a3d;
+  --color-tertiary: #2a1305;
+  --color-neutral: #6d7185;
+  --color-text-strong: #ece7dc;
+  --color-text-muted: rgba(236, 231, 220, 0.55);
+  --color-border: rgba(255, 255, 255, 0.06);
+  --color-border-strong: rgba(255, 255, 255, 0.14);
+  --color-danger: #ff6b5e;
+  --color-danger-bg: rgba(255, 107, 94, 0.1);
+  color-scheme: dark;
+  --color-on-accent: #2a1305;
+  --color-accent-text: #ff8a3d;
+  --color-header-bg: rgba(6, 7, 13, 0.85);
+  --color-accent-soft: rgba(255, 138, 61, 0.14);
+  --color-accent-ring: rgba(255, 138, 61, 0.22);
 
-  --font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --gradient-surface: linear-gradient(to bottom right, #1c2032, #151828 50%, #0e1120);
+  --gradient-accent: linear-gradient(to bottom, #ffab6e, #ff8a3d 50%, #e5732a);
+
+  --font-family: "Archivo", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "Azeret Mono", ui-monospace, monospace;
 
   --radius-sm: 4px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
+  --radius-md: 8px;
+  --radius-lg: 18px;
+  --radius-xl: 18px;
   --radius-2xl: 24px;
   --radius-full: 9999px;
 
@@ -33,17 +44,47 @@
   --space-section: 32px;
   --space-card: 16px;
 
-  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-soft: 0 4px 24px 0 rgba(0, 0, 0, 0.03);
+  --shadow-xs: 0 1px 0 0 rgba(255, 255, 255, 0.14) inset, 0 4px 14px 0 rgba(0, 0, 0, 0.5);
+  --shadow-soft: 0 0 0 1px rgba(0, 0, 0, 0.74), 0 0 0 2px rgba(255, 255, 255, 0.05), 0 16px 30px -16px rgba(0, 0, 0, 0.92);
   --shadow-control:
-    0 2px 3px -1px rgba(0, 0, 0, 0.1),
-    0 1px 0 0 rgba(25, 28, 33, 0.02),
-    0 0 0 1px rgba(25, 28, 33, 0.08);
-  --shadow-card: 0 12px 40px 0 rgba(0, 0, 0, 0.08);
+    0 1px 0 0 rgba(255, 255, 255, 0.14) inset,
+    0 0 0 1px rgba(0, 0, 0, 0.45),
+    0 4px 14px 0 rgba(0, 0, 0, 0.5);
+  --shadow-card: 0 38px 84px -32px rgba(0, 0, 0, 0.9), 0 1px 0 0 rgba(255, 255, 255, 0.14) inset;
 
-  --duration-fast: 150ms;
+  --duration-fast: 90ms;
   --duration-slow: 500ms;
-  --ease: ease;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --color-bg: #f6f3ec;
+  --color-surface: #ffffff;
+  --color-surface-raised: #ece7dc;
+  --color-primary: #e5732a;
+  --color-secondary: #d9651a;
+  --color-neutral: #8a8fa3;
+  --color-text-strong: #1a1c28;
+  --color-text-muted: #5f6378;
+  --color-border: rgba(26, 28, 40, 0.08);
+  --color-border-strong: rgba(26, 28, 40, 0.16);
+  --color-danger: #c4352a;
+  --color-danger-bg: rgba(196, 53, 42, 0.08);
+  --color-header-bg: rgba(246, 243, 236, 0.85);
+  --color-accent-text: #8a3a05;
+  --color-accent-soft: rgba(229, 115, 42, 0.14);
+  --color-accent-ring: rgba(229, 115, 42, 0.25);
+
+  --gradient-surface: linear-gradient(to bottom right, #ffffff, #fbf9f4);
+
+  --shadow-xs: 0 1px 2px 0 rgba(26, 28, 40, 0.06);
+  --shadow-soft: 0 0 0 1px rgba(26, 28, 40, 0.04), 0 8px 24px -12px rgba(26, 28, 40, 0.18);
+  --shadow-control:
+    0 1px 0 0 rgba(255, 255, 255, 0.5) inset,
+    0 0 0 1px rgba(26, 28, 40, 0.08),
+    0 3px 8px 0 rgba(26, 28, 40, 0.14);
+  --shadow-card: 0 24px 48px -20px rgba(26, 28, 40, 0.28);
 }
 
 * {
@@ -56,8 +97,8 @@ body {
   color: var(--color-text-muted);
   font-family: var(--font-family);
   font-size: 14px;
-  font-weight: 300;
-  line-height: 22.4px;
+  font-weight: 400;
+  line-height: 20px;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -99,7 +140,8 @@ label {
   display: block;
   font-size: 14px;
   font-weight: 500;
-  line-height: 21px;
+  line-height: 20px;
+  letter-spacing: 0.35px;
   color: var(--color-text-strong);
   margin-bottom: var(--space-16);
 }
@@ -114,7 +156,7 @@ select {
   font-family: var(--font-family);
   font-size: 14px;
   color: var(--color-text-strong);
-  background: var(--color-bg);
+  background: var(--color-surface);
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-md);
   transition:
@@ -127,7 +169,7 @@ textarea:focus,
 select:focus {
   outline: none;
   border-color: var(--color-secondary);
-  box-shadow: 0 0 0 3px rgba(251, 146, 60, 0.15);
+  box-shadow: 0 0 0 3px var(--color-accent-ring);
 }
 
 textarea {
@@ -153,7 +195,8 @@ label > input[type="checkbox"] {
   top: 0;
   z-index: 10;
   padding: var(--space-section) var(--space-section) var(--space-16);
-  background: var(--color-bg);
+  background: var(--color-header-bg);
+  backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-border-strong);
 }
 
@@ -169,8 +212,9 @@ label > input[type="checkbox"] {
   display: block;
   color: var(--color-text-strong);
   font-size: 28px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
 }
 
 .app-header-title:hover {
@@ -227,9 +271,16 @@ label > input[type="checkbox"] {
 }
 
 .locale-switch button.active {
-  background: var(--color-bg);
+  background: var(--color-surface-raised);
   color: var(--color-text-strong);
   box-shadow: var(--shadow-xs);
+}
+
+.theme-toggle {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-md);
 }
 
 .app-header-user {
@@ -283,13 +334,19 @@ label > input[type="checkbox"] {
 
 .app-header-nav-label {
   color: var(--color-text-muted);
-  font-size: 14px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
 }
 
 .app-header-nav a {
   color: var(--color-text-muted);
-  font-weight: 500;
-  font-size: 14px;
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
 }
 
 .app-header-nav a:hover,
@@ -310,7 +367,7 @@ label > input[type="checkbox"] {
 /* Card */
 
 .card {
-  background: var(--color-bg);
+  background: var(--gradient-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--space-card);
@@ -422,8 +479,8 @@ label > input[type="checkbox"] {
 }
 
 .category-filter-item.active {
-  background: var(--color-tertiary);
-  color: #fff;
+  background: var(--color-primary);
+  color: var(--color-on-accent);
 }
 
 .category-filter-label {
@@ -446,7 +503,7 @@ label > input[type="checkbox"] {
 }
 
 .category-filter-item.active .category-filter-desc {
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--color-on-accent);
 }
 
 .category-filter-count {
@@ -456,7 +513,7 @@ label > input[type="checkbox"] {
 }
 
 .category-filter-item.active .category-filter-count {
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--color-on-accent);
 }
 
 @media (max-width: 760px) {
@@ -482,7 +539,7 @@ label > input[type="checkbox"] {
 .entity-card {
   display: flex;
   flex-direction: column;
-  background: var(--color-bg);
+  background: var(--gradient-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
   overflow: hidden;
@@ -512,7 +569,7 @@ label > input[type="checkbox"] {
   align-items: center;
   justify-content: center;
   color: var(--color-neutral);
-  background: linear-gradient(135deg, var(--color-border) 0%, #ffffff 100%);
+  background: linear-gradient(135deg, var(--color-surface-raised) 0%, var(--color-bg) 100%);
 }
 
 .entity-card-body {
@@ -550,7 +607,8 @@ label > input[type="checkbox"] {
 
 .entity-card-price {
   color: var(--color-secondary);
-  font-weight: 600;
+  font-family: var(--font-mono);
+  font-weight: 400;
   font-size: 14px;
 }
 
@@ -581,15 +639,16 @@ label > input[type="checkbox"] {
 }
 
 .button-primary {
-  background: var(--color-secondary);
-  color: #ffffff;
+  background: var(--gradient-accent);
+  color: var(--color-on-accent);
+  border-color: rgba(255, 255, 255, 0.3);
   box-shadow: var(--shadow-control);
 }
 
 .button-primary:not(:disabled):hover {
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-card);
+  filter: brightness(1.08);
 }
+
 
 .button-ghost {
   background: transparent;
@@ -622,7 +681,7 @@ label > input[type="checkbox"] {
   padding: 0;
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-border-strong);
-  background: var(--color-bg);
+  background: var(--color-surface);
   color: var(--color-text-muted);
   cursor: pointer;
   transition:
@@ -660,9 +719,12 @@ label > input[type="checkbox"] {
   align-items: center;
   gap: var(--space-4);
   padding: var(--space-4) var(--space-8);
-  border-radius: var(--radius-full);
-  font-size: 12px;
-  font-weight: 500;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
 }
 
 .badge-neutral {
@@ -671,8 +733,8 @@ label > input[type="checkbox"] {
 }
 
 .badge-accent {
-  background: rgba(251, 146, 60, 0.12);
-  color: #c2660f;
+  background: var(--color-accent-soft);
+  color: var(--color-accent-text);
 }
 
 /* Photo grid */
@@ -723,7 +785,7 @@ label > input[type="checkbox"] {
 
 .rich-text:focus-within {
   border-color: var(--color-secondary);
-  box-shadow: 0 0 0 3px rgba(251, 146, 60, 0.15);
+  box-shadow: 0 0 0 3px var(--color-accent-ring);
 }
 
 .rich-text-toolbar {
@@ -731,7 +793,7 @@ label > input[type="checkbox"] {
   align-items: center;
   gap: var(--space-4);
   padding: var(--space-6) var(--space-8);
-  background: var(--color-border);
+  background: var(--color-surface-raised);
   border-bottom: 1px solid var(--color-border-strong);
 }
 
@@ -760,12 +822,12 @@ label > input[type="checkbox"] {
 }
 
 .rich-text-toolbar button:hover {
-  background: var(--color-bg);
+  background: var(--color-surface-raised);
   color: var(--color-text-strong);
 }
 
 .rich-text-toolbar button.is-active {
-  background: var(--color-bg);
+  background: var(--color-surface-raised);
   color: var(--color-secondary);
   box-shadow: var(--shadow-xs);
 }
@@ -779,7 +841,7 @@ label > input[type="checkbox"] {
   outline: none;
   font-size: 14px;
   color: var(--color-text-strong);
-  line-height: 22.4px;
+  line-height: 20px;
 }
 
 .rich-text-content .tiptap p {
@@ -799,7 +861,7 @@ label > input[type="checkbox"] {
 .field-hint {
   color: var(--color-text-muted);
   font-size: 13px;
-  font-weight: 300;
+  font-weight: 400;
   margin-top: calc(var(--space-6) * -1);
   margin-bottom: var(--space-16);
 }
@@ -811,9 +873,12 @@ label > input[type="checkbox"] {
 
 .field-label {
   display: block;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 21px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  line-height: 20px;
   color: var(--color-text-strong);
   margin-bottom: var(--space-6);
 }
