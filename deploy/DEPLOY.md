@@ -15,9 +15,15 @@
 
 - Docker Compose версии **2.24 или новее** (в override-файле используется `!reset`):
   `docker compose version`.
-- Контейнер nginx подключён к docker-сети `distributor-api-shared-network`:
-  `docker network inspect distributor-api-shared-network | grep -i nginx`.
-  Если сеть называется иначе, задайте её имя в `.env` через `SHARED_NETWORK`.
+- Контейнер nginx подключён к общей docker-сети, по умолчанию
+  `distributor-api-shared-network`. Если сеть называется иначе, задайте её имя
+  в `.env` через `SHARED_NETWORK`. Ниже в командах имя сети берётся из переменной
+  `NET`, задайте её так же:
+
+  ```bash
+  NET=distributor-api-shared-network   # или значение SHARED_NETWORK из .env
+  docker network inspect "$NET" | grep -i nginx
+  ```
 - Свободный доступ сервера к `https://<ваш-tenant>.auth0.com` (backend загружает
   ключи для проверки токенов).
 
@@ -26,11 +32,12 @@
 Делается один раз в Auth0 Dashboard.
 
 **Приложение (Single Page Application)**, которое уже используется для админки.
-Добавьте в него адрес `https://dswapi.online/booklet` (без слэша в конце) в поля:
+Добавьте в него:
 
-- Allowed Callback URLs
-- Allowed Logout URLs
-- Allowed Web Origins
+- Allowed Callback URLs: `https://dswapi.online/booklet` (без слэша в конце)
+- Allowed Logout URLs: `https://dswapi.online/booklet`
+- Allowed Web Origins: `https://dswapi.online` (только origin, **без пути**: браузер
+  сообщает origin без `/booklet`, и с путём тихий вход и продление сессии не работают)
 
 **API** (Applications → APIs → Create API):
 
@@ -79,17 +86,21 @@ BASE_PATH=/booklet/                       # префикс публикации,
 **Контейнеры нужно поднять до перезагрузки nginx** (см. шаг 5).
 
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.nginx.yml up -d --build
+docker compose -f docker-compose.yml -f docker-compose.nginx.yml up -d --build --remove-orphans
 docker compose -f docker-compose.yml -f docker-compose.nginx.yml ps
 ```
+
+`--remove-orphans` удаляет контейнеры от старых имён сервисов (`backend`, `admin`),
+если проект уже запускался до переименования. Иначе старая админка может удерживать
+сетевое имя `booklet-admin`, и nginx будет отправлять запросы в устаревший стек.
 
 Оба контейнера (`booklet-backend`, `booklet-admin`) должны быть в состоянии `healthy`.
 
 Проверьте, что админка видна из сети nginx:
 
 ```bash
-docker network inspect distributor-api-shared-network | grep -i booklet
-docker run --rm --network distributor-api-shared-network curlimages/curl \
+docker network inspect "$NET" | grep -i booklet
+docker run --rm --network "$NET" curlimages/curl \
   -s -o /dev/null -w "%{http_code}\n" http://booklet-admin:8080/
 # ожидается: 200
 ```
@@ -185,7 +196,7 @@ https://dswapi.online/booklet/
 
 ```bash
 git pull
-docker compose -f docker-compose.yml -f docker-compose.nginx.yml up -d --build
+docker compose -f docker-compose.yml -f docker-compose.nginx.yml up -d --build --remove-orphans
 ```
 
 Изменения в nginx применяйте как в шаге 5. После пересоздания контейнера
@@ -197,10 +208,19 @@ docker compose -f docker-compose.yml -f docker-compose.nginx.yml up -d --build
 База (SQLite) и загруженные файлы лежат в docker-томе `backend_data`
 (имя томов начинается с имени проекта compose; посмотреть: `docker volume ls | grep backend_data`).
 
+Копируйте том только при остановленном backend: SQLite-файл, скопированный во время
+записи, может оказаться повреждённым, а база и файлы попадут в архив из разных
+моментов времени. На время копирования (обычно секунды) API недоступен.
+
 ```bash
-docker run --rm -v <имя_тома>:/data -v "$PWD":/backup alpine \
+C="docker compose -f docker-compose.yml -f docker-compose.nginx.yml"
+$C stop booklet-backend
+docker run --rm -v <имя_тома>:/data:ro -v "$PWD":/backup alpine \
   tar czf /backup/booklet-data-$(date +%F).tar.gz -C /data .
+$C start booklet-backend
 ```
+
+Если `tar` завершился ошибкой, всё равно выполните `$C start booklet-backend`.
 
 Команда `docker compose down -v` **удаляет том вместе с данными**, не используйте
 флаг `-v` на рабочем сервере.
@@ -217,7 +237,7 @@ docker run --rm -v <имя_тома>:/data -v "$PWD":/backup alpine \
 | Симптом | Причина и решение |
 | --- | --- |
 | nginx не стартует: `host not found in upstream "booklet-admin"` | Контейнер админки не запущен или не в сети `distributor-api-shared-network`. Выполните шаг 4, проверьте сеть, затем перезагрузите nginx. |
-| `502 Bad Gateway` на `/booklet/` | Контейнер был пересоздан, nginx держит старый IP: `nginx -s reload`. Либо контейнер не `healthy`: `docker compose -f docker-compose.yml -f docker-compose.nginx.yml ps`, затем `... logs booklet-admin`. |
+| `502 Bad Gateway` на `/booklet/` | Контейнер `booklet-admin` был пересоздан, внешний nginx держит старый IP: `nginx -s reload`. Либо контейнер не `healthy`: `docker compose -f docker-compose.yml -f docker-compose.nginx.yml ps`, затем `... logs booklet-admin`. |
 | `/booklet` без слэша открывает чужой сервис (facade) | `location = /booklet` лежит не в блоке 443. Перенесите его (шаг 5). |
 | После входа ошибка Auth0 `Callback URL mismatch` | В приложении Auth0 не добавлен `https://dswapi.online/booklet` (шаг 1). |
 | Вход есть, но сохранение даёт 401 | Не создан API в Auth0 или `AUTH0_AUDIENCE` в `.env` не совпадает с его Identifier. После правки пересоберите образы (шаг 4). |
