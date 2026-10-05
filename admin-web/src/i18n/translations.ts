@@ -23,6 +23,9 @@ const ru: Dictionary = {
   "common.searchPlaceholder": "Поиск...",
   "common.search": "Поиск",
   "common.language": "Язык",
+  "common.theme": "Тема",
+  "common.themeLight": "Светлая тема",
+  "common.themeDark": "Тёмная тема",
   "common.noCategoriesYet": "Сначала создайте категорию",
   "common.saved": "Сохранено",
 
@@ -124,6 +127,9 @@ const uk: Dictionary = {
   "common.searchPlaceholder": "Пошук...",
   "common.search": "Пошук",
   "common.language": "Мова",
+  "common.theme": "Тема",
+  "common.themeLight": "Світла тема",
+  "common.themeDark": "Темна тема",
   "common.noCategoriesYet": "Спочатку створіть категорію",
   "common.saved": "Збережено",
 
@@ -225,6 +231,9 @@ const en: Dictionary = {
   "common.searchPlaceholder": "Search...",
   "common.search": "Search",
   "common.language": "Language",
+  "common.theme": "Theme",
+  "common.themeLight": "Light theme",
+  "common.themeDark": "Dark theme",
   "common.noCategoriesYet": "Create a category first",
   "common.saved": "Saved",
 

@@ -7,9 +7,10 @@ import { CategoriesListPage } from "./pages/CategoriesListPage";
 import { CategoryEditPage } from "./pages/CategoryEditPage";
 import { BrandSettingsPage } from "./pages/BrandSettingsPage";
 import { TeamsPage } from "./pages/TeamsPage";
-import { SearchIcon } from "./components/icons";
+import { MoonIcon, SearchIcon, SunIcon } from "./components/icons";
 import { useSearch } from "./context/SearchContext";
 import { useLocale } from "./context/LocaleContext";
+import { useTheme } from "./context/ThemeContext";
 import { LOCALES, LOCALE_LABELS } from "./i18n/translations";
 
 const SEARCHABLE_PATHS = ["/", "/categories"];
@@ -18,6 +19,7 @@ export function App() {
   const location = useLocation();
   const { search, setSearch } = useSearch();
   const { locale, setLocale, t } = useLocale();
+  const { theme, toggleTheme } = useTheme();
   const { isLoading, isAuthenticated, error, loginWithRedirect, logout, user } = useAuth0();
   const showSearch = SEARCHABLE_PATHS.includes(location.pathname);
 
@@ -95,6 +97,15 @@ export function App() {
               onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
             >
               {t("auth.logout")}
+            </button>
+            <button
+              type="button"
+              className="icon-button theme-toggle"
+              onClick={toggleTheme}
+              aria-label={t("common.theme")}
+              title={theme === "dark" ? t("common.themeLight") : t("common.themeDark")}
+            >
+              {theme === "dark" ? <SunIcon /> : <MoonIcon />}
             </button>
           </div>
         </div>
