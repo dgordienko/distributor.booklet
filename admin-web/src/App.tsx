@@ -8,6 +8,7 @@ import { CategoryEditPage } from "./pages/CategoryEditPage";
 import { BrandSettingsPage } from "./pages/BrandSettingsPage";
 import { TeamsPage } from "./pages/TeamsPage";
 import { MoonIcon, SearchIcon, SunIcon } from "./components/icons";
+import { setAccessTokenProvider } from "./api/client";
 import { useSearch } from "./context/SearchContext";
 import { useLocale } from "./context/LocaleContext";
 import { useTheme } from "./context/ThemeContext";
@@ -21,8 +22,16 @@ export function App() {
   const { search, setSearch } = useSearch();
   const { locale, setLocale, t } = useLocale();
   const { theme, toggleTheme } = useTheme();
-  const { isLoading, isAuthenticated, error, loginWithRedirect, logout, user } = useAuth0();
+  const { isLoading, isAuthenticated, error, loginWithRedirect, logout, user, getAccessTokenSilently } =
+    useAuth0();
   const showSearch = SEARCHABLE_PATHS.includes(location.pathname);
+
+  // Страницы с данными рендерятся только после входа, а первыми уходят GET-запросы
+  // (публичные), поэтому к первой мутации провайдер токена уже выставлен.
+  useEffect(() => {
+    setAccessTokenProvider(() => getAccessTokenSilently());
+    return () => setAccessTokenProvider(undefined);
+  }, [getAccessTokenSilently]);
 
   useEffect(() => {
     if (!showSearch) setSearch("");

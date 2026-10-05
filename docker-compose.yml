@@ -11,6 +11,10 @@ services:
       DATABASE_URL: file:/data/app.db
       UPLOADS_DIR: /data/uploads
       DEVICES_API_URL: ${DEVICES_API_URL:-http://194.247.12.105:8089/api/devices}
+      # Writes (POST/PUT/PATCH/DELETE) require an Auth0 access token; GETs are public.
+      AUTH0_ISSUER_BASE_URL: ${AUTH0_DOMAIN:+https://${AUTH0_DOMAIN}/}
+      AUTH0_AUDIENCE: ${AUTH0_AUDIENCE:-}
+      AUTH_DISABLED: ${AUTH_DISABLED:-false}
     volumes:
       - backend_data:/data
     ports:
@@ -35,6 +39,7 @@ services:
       args:
         VITE_AUTH0_DOMAIN: ${AUTH0_DOMAIN:?set AUTH0_DOMAIN in .env}
         VITE_AUTH0_CLIENT_ID: ${AUTH0_CLIENT_ID:?set AUTH0_CLIENT_ID in .env}
+        VITE_AUTH0_AUDIENCE: ${AUTH0_AUDIENCE:-}
         VITE_BASE_PATH: ${BASE_PATH:-/}
     image: distributor-presenter-admin
     restart: unless-stopped

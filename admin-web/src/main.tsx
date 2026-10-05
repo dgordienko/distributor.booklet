@@ -14,7 +14,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <Auth0Provider
       domain={import.meta.env.VITE_AUTH0_DOMAIN}
       clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
-      authorizationParams={{ redirect_uri: window.location.origin + BASE_PATH }}
+      authorizationParams={{
+        redirect_uri: window.location.origin + BASE_PATH,
+        audience: import.meta.env.VITE_AUTH0_AUDIENCE,
+      }}
     >
       <BrowserRouter basename={BASE_PATH || "/"}>
         <ThemeProvider>

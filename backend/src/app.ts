@@ -5,6 +5,7 @@ import { brandRouter } from "./routes/brand.routes";
 import { categoriesRouter } from "./routes/categories.routes";
 import { teamsRouter } from "./routes/teams.routes";
 import { UPLOADS_DIR } from "./middleware/upload";
+import { authErrorHandler, requireAuthForWrites } from "./middleware/requireAuth";
 
 export function createApp() {
   const app = express();
@@ -14,10 +15,12 @@ export function createApp() {
   app.use("/uploads", express.static(UPLOADS_DIR));
 
   app.get("/health", (_req, res) => res.json({ status: "ok" }));
+  app.use("/api", requireAuthForWrites());
   app.use("/api/products", productsRouter);
   app.use("/api/brand", brandRouter);
   app.use("/api/categories", categoriesRouter);
   app.use("/api/teams", teamsRouter);
+  app.use(authErrorHandler);
 
   return app;
 }
