@@ -46,6 +46,12 @@
   Он не обязан существовать. Это значение и есть `AUTH0_AUDIENCE`.
 - Signing Algorithm: `RS256`.
 
+**Доступ приложения к API.** В API откройте вкладку **Application Access** и в разделе
+**User Access** (доступ от имени пользователя, не Machine-to-Machine) разрешите доступ
+SPA-приложению админки. Без этого вход завершится ошибкой
+`Client "<client id>" is not authorized to access resource server "https://booklet-api"`.
+Пересборка после этой настройки не нужна, достаточно войти заново.
+
 Без API все изменения (создание, редактирование, удаление, загрузка файлов)
 будут отклоняться backend с ошибкой, а чтение останется доступным.
 
@@ -66,11 +72,33 @@ git checkout main        # все изменения уже смержены в 
 ```env
 AUTH0_DOMAIN=<tenant>.auth0.com
 AUTH0_CLIENT_ID=<client id SPA-приложения>
-AUTH0_AUDIENCE=https://booklet-api        # Identifier API из шага 1
-BASE_PATH=/booklet/                       # префикс публикации, со слэшами с обеих сторон
-# SHARED_NETWORK=distributor-api-shared-network   # только если имя сети другое
-# DEVICES_API_URL=http://<host>:8089/api/devices  # если нужно переопределить
+# Identifier API из шага 1, должен совпадать посимвольно
+AUTH0_AUDIENCE=https://booklet-api
+# Префикс публикации, со слэшами с обеих сторон
+BASE_PATH=/booklet/
+# Только если общая сеть называется иначе
+# SHARED_NETWORK=distributor-api-shared-network
+# Если нужно переопределить адрес API устройств
+# DEVICES_API_URL=http://<host>:8089/api/devices
 ```
+
+Комментарии пишите отдельной строкой, не после значения.
+
+**Проверка перед сборкой.** Убедитесь, что переменные реально доходят до compose.
+Если `env.example` копировался целиком, строки `BASE_PATH` или `AUTH0_AUDIENCE` легко
+пропустить или оставить закомментированными:
+
+```bash
+grep -nE '^(AUTH0_DOMAIN|AUTH0_CLIENT_ID|AUTH0_AUDIENCE|BASE_PATH)=' .env
+docker compose -f docker-compose.yml -f docker-compose.nginx.yml config \
+  | grep -E 'VITE_BASE_PATH|VITE_AUTH0_AUDIENCE|AUTH0_AUDIENCE|AUTH0_ISSUER_BASE_URL'
+```
+
+Должны быть видны все четыре строки `.env`, а в `config` значения
+`VITE_BASE_PATH: /booklet/`, ваш `AUTH0_AUDIENCE` и
+`AUTH0_ISSUER_BASE_URL: https://<tenant>.auth0.com/`. Пустое значение означает,
+что переменная не задана: без `BASE_PATH` в браузере будет белый экран, без
+`AUTH0_AUDIENCE` любое сохранение вернёт 503.
 
 Важно:
 
@@ -241,8 +269,9 @@ $C start booklet-backend
 | `/booklet` без слэша открывает чужой сервис (facade) | `location = /booklet` лежит не в блоке 443. Перенесите его (шаг 5). |
 | После входа ошибка Auth0 `Callback URL mismatch` | В приложении Auth0 не добавлен `https://dswapi.online/booklet` (шаг 1). |
 | Вход есть, но сохранение даёт 401 | Не создан API в Auth0 или `AUTH0_AUDIENCE` в `.env` не совпадает с его Identifier. После правки пересоберите образы (шаг 4). |
-| Сохранение даёт 503: `Auth is not configured` | В `.env` не задан `AUTH0_AUDIENCE` или `AUTH0_DOMAIN`. |
-| Белая страница, ошибки 404 на `/assets/...` | Образ собран без `BASE_PATH=/booklet/`. Задайте переменную в `.env` и выполните шаг 4. |
+| Сохранение даёт 503: `Auth is not configured` | В `.env` не задан `AUTH0_AUDIENCE` или `AUTH0_DOMAIN`. Проверьте командами из шага 3 и пересоберите оба образа (шаг 4). |
+| Белая страница; в DevTools → Network скрипты и стили грузятся с `/assets/...` (без `/booklet/`) и отвечают 503 или 404 | Образ собран без `BASE_PATH=/booklet/`, а `/assets/` на общем nginx перехватывает Dagster. Добавьте `BASE_PATH` в `.env`, проверьте командами из шага 3, пересоберите админку (`... up -d --build booklet-admin`) и выполните `nginx -s reload`. Проверка: `curl -s https://dswapi.online/booklet/ \| grep -o '/booklet/assets/[^"]*'` должна что-то найти. |
+| Ошибка входа `Client "..." is not authorized to access resource server "..."` | SPA-приложению не выдан User Access к API в Auth0 (шаг 1, «Доступ приложения к API»). Пересборка не нужна. |
 | Картинки не открываются | Образ собран без `BASE_PATH` (ссылки идут на `/uploads/...` мимо префикса) или Android использует старый базовый адрес. |
 | `could not find an available, non-overlapping IPv4 address pool` | Запуск без `-f docker-compose.nginx.yml`: базовый compose создаёт свою сеть, а свободных адресных пулов Docker на сервере нет. Запускайте всегда с обоими файлами. |
 | Загрузка файла отклоняется (`413`) | Лимит 20 МБ задан в nginx на сервере и в контейнере админки; для больших файлов увеличьте `client_max_body_size` в обоих местах. |
