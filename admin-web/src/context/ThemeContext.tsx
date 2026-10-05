@@ -5,7 +5,12 @@ export type Theme = "dark" | "light";
 const STORAGE_KEY = "admin-theme";
 
 function detectTheme(): Theme {
-  const stored = localStorage.getItem(STORAGE_KEY);
+  let stored: string | null = null;
+  try {
+    stored = localStorage.getItem(STORAGE_KEY);
+  } catch {
+    // storage недоступен (приватный режим, запрет cookies) — берём системную тему
+  }
   if (stored === "dark" || stored === "light") return stored;
   return window.matchMedia?.("(prefers-color-scheme: light)").matches ? "light" : "dark";
 }
@@ -21,8 +26,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>(detectTheme);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, theme);
     document.documentElement.dataset.theme = theme;
+    try {
+      localStorage.setItem(STORAGE_KEY, theme);
+    } catch {
+      // выбор темы просто не сохранится между сессиями
+    }
   }, [theme]);
 
   function toggleTheme() {

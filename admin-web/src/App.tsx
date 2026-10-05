@@ -102,7 +102,7 @@ export function App() {
               type="button"
               className="icon-button theme-toggle"
               onClick={toggleTheme}
-              aria-label={t("common.theme")}
+              aria-label={theme === "dark" ? t("common.themeLight") : t("common.themeDark")}
               title={theme === "dark" ? t("common.themeLight") : t("common.themeDark")}
             >
               {theme === "dark" ? <SunIcon /> : <MoonIcon />}
