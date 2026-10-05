@@ -64,7 +64,9 @@ export interface Brand {
   logoUrl: string;
 }
 
-const API_BASE = "/api";
+import { BASE_PATH } from "../lib/basePath";
+
+const API_BASE = `${BASE_PATH}/api`;
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${API_BASE}${path}`, init);

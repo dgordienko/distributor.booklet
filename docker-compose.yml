@@ -35,6 +35,7 @@ services:
       args:
         VITE_AUTH0_DOMAIN: ${AUTH0_DOMAIN:?set AUTH0_DOMAIN in .env}
         VITE_AUTH0_CLIENT_ID: ${AUTH0_CLIENT_ID:?set AUTH0_CLIENT_ID in .env}
+        VITE_BASE_PATH: ${BASE_PATH:-/}
     image: distributor-presenter-admin
     restart: unless-stopped
     ports:

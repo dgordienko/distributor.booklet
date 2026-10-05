@@ -1,3 +1,4 @@
+import { assetUrl } from "../lib/basePath";
 import { useEffect, useState } from "react";
 import { api, type Brand } from "../api/client";
 import { Button } from "../components/Button";
@@ -83,7 +84,7 @@ export function BrandSettingsPage() {
             style={{ display: "none" }}
           />
           {brand.logoUrl && (
-            <img src={brand.logoUrl} alt={t("brand.logoAlt")} className="image-preview" />
+            <img src={assetUrl(brand.logoUrl)} alt={t("brand.logoAlt")} className="image-preview" />
           )}
         </div>
       </div>

@@ -1,3 +1,4 @@
+import { assetUrl } from "../lib/basePath";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { api, type Category, type Team } from "../api/client";
@@ -123,7 +124,7 @@ export function CategoryEditPage() {
               style={{ display: "none" }}
             />
             {category.imageUrl && (
-              <img src={category.imageUrl} alt="" className="image-preview" />
+              <img src={assetUrl(category.imageUrl)} alt="" className="image-preview" />
             )}
           </div>
         </div>

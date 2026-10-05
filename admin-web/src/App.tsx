@@ -11,6 +11,7 @@ import { MoonIcon, SearchIcon, SunIcon } from "./components/icons";
 import { useSearch } from "./context/SearchContext";
 import { useLocale } from "./context/LocaleContext";
 import { useTheme } from "./context/ThemeContext";
+import { BASE_PATH } from "./lib/basePath";
 import { LOCALES, LOCALE_LABELS } from "./i18n/translations";
 
 const SEARCHABLE_PATHS = ["/", "/categories"];
@@ -94,7 +95,7 @@ export function App() {
             <button
               type="button"
               className="button button-ghost"
-              onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
+              onClick={() => logout({ logoutParams: { returnTo: window.location.origin + BASE_PATH } })}
             >
               {t("auth.logout")}
             </button>

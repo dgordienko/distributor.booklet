@@ -1,3 +1,4 @@
+import { assetUrl } from "../lib/basePath";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { api, type Category, type Product, type ProductInput } from "../api/client";
@@ -248,7 +249,7 @@ export function ProductEditPage() {
             <div className="photo-grid">
               {product?.photos.map((photo) => (
                 <div className="photo-tile" key={photo.id}>
-                  <img src={photo.url} alt="" />
+                  <img src={assetUrl(photo.url)} alt="" />
                   <div className="photo-tile-actions">
                     {photo.isPrimary ? (
                       <span className="badge badge-accent">

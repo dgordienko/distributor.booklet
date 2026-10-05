@@ -1,3 +1,4 @@
+import { assetUrl } from "../lib/basePath";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { api, type Category } from "../api/client";
@@ -44,7 +45,7 @@ export function CategoriesListPage() {
         {filteredCategories.map((category, index) => (
           <div className="entity-card" key={category.id}>
             {category.imageUrl ? (
-              <img src={category.imageUrl} alt="" className="entity-card-media" />
+              <img src={assetUrl(category.imageUrl)} alt="" className="entity-card-media" />
             ) : (
               <div className="entity-card-media-placeholder">
                 <PhotoIcon />

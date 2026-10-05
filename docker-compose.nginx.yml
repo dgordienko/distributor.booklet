@@ -1,0 +1,25 @@
+# Override for running behind the existing shared nginx (dswapi.online).
+#
+#   BASE_PATH=/booklet/ docker compose -f docker-compose.yml \
+#     -f docker-compose.nginx.yml up -d --build
+#
+# The admin container joins the shared docker network under the alias
+# "booklet-admin" (used in the nginx upstream, see deploy/nginx-booklet.conf)
+# and nothing is published on the host, so the only way in is through nginx
+# with TLS. Requires Docker Compose >= 2.24 for `!reset`.
+services:
+  backend:
+    ports: !reset []
+
+  admin:
+    ports: !reset []
+    networks:
+      default: {}
+      shared:
+        aliases:
+          - booklet-admin
+
+networks:
+  shared:
+    external: true
+    name: ${SHARED_NETWORK:-distributor-api-shared-network}
