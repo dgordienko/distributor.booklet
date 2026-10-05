@@ -1,5 +1,8 @@
 services:
-  backend:
+  # Service names are prefixed with "booklet-": Compose registers them as DNS
+  # names on every network a service joins, including the shared nginx network
+  # (see docker-compose.nginx.yml), where generic names would collide.
+  booklet-backend:
     build:
       context: .
       dockerfile: backend/Dockerfile
@@ -32,7 +35,7 @@ services:
       retries: 3
       start_period: 15s
 
-  admin:
+  booklet-admin:
     build:
       context: .
       dockerfile: admin-web/Dockerfile
@@ -46,7 +49,7 @@ services:
     ports:
       - "${ADMIN_PORT:-8080}:8080"
     depends_on:
-      backend:
+      booklet-backend:
         condition: service_healthy
 
 volumes:
